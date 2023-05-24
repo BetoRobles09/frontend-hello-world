@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Card from './components/Card'
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
+		setData([])
 		fetchAPI(searchQuery)
 	}
 
@@ -18,11 +19,19 @@ function App() {
 		const url = `https://api.giphy.com/v1/gifs/search?api_key=U1xGwtYuloYC9R4X1x0HTgnIUGPh03q8&q=${query}&limit=5&offset=0&rating=g&lang=en`
 		const res = await fetch(url)
 		const gifData = await res.json()
-		console.log(gifData.data)
 		setData(gifData.data)
 	}
 
-	console.log(searchQuery)
+	const fetchAPIRandom = async () => {
+		const url = `https://api.giphy.com/v1/gifs/trending?api_key=U1xGwtYuloYC9R4X1x0HTgnIUGPh03q8&limit=5&rating=g`
+		const res = await fetch(url)
+		const gifData = await res.json()
+		setData(gifData.data)
+	}
+
+	useEffect(() => {
+		fetchAPIRandom()
+	}, [])
 
 	return (
 		<main className='container mx-auto h-screen bg-gray-300'>
